@@ -68,7 +68,7 @@ function salam() {
 
   if (elementSalam) {
     if (namaUser) {
-      elementSalam.innerText = "Halo, " + namaUser + "!";
+      elementSalam.innerText = namaUser;
     } else {
       notifPopup("Akses ditolak!!! Silahkan login dulu Bosku!");
       Index();
