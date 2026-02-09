@@ -98,8 +98,9 @@ body {
   border: 3px solid black;
   border-radius: 20px;
   padding: 0px 20px;
-  margin-bottom: 10px
-  ;
+  margin-bottom: 10px;
+  font-size: clamp(8px, 4vw, 20px);
+  align-content: space-between;
 }
 
 .nav-left {
@@ -146,4 +147,40 @@ button {
 
 .title {
   align-items: center;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 600px) {
+  .main-header {
+    grid-template-columns: 1fr;
+    padding: 10px;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .nav-left,
+  .nav-right,
+  .av-center {
+    display: block;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nav-left div,
+  .nav-right div,
+  button {
+    border-right: none;
+    padding: 6px 0;
+    display: block;
+  }
+
+  .av-circle {
+    position: static;
+    left: auto;
+    top: auto;
+    transform: none;
+    margin: 10px auto;
+    width: min(80px, 18vw);
+    height: min(80px, 18vw);
+  }
 }
