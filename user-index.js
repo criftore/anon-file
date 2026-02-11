@@ -32,6 +32,15 @@ function unikId() {
   return id;
 }
 
+function warnaAcak() {
+  const hex = "0123456789ABCDEF";
+  let warna = "#";
+  for (let i = 0; i < 6; i++) {
+    warna += hex[Math.floor(Math.random() * 16)];
+  }
+  return warna;
+}
+
 function prosesLogin() {
   let username = document.getElementById("username").value;
   if (username === "") {
@@ -41,6 +50,15 @@ function prosesLogin() {
     const idBaru = unikId();
     localStorage.setItem("user_aktif", username);
     localStorage.setItem("user_id", idBaru);
+    let riwayatData = JSON.parse(localStorage.getItem("history-_login")) || [];
+    const loginBaru = {
+      nama: username,
+      id: idBaru,
+      waktu: new Date().toLocaleString(),
+    };
+    riwayatData.push(loginBaru);
+
+    localStorage.setItem("history_login", JSON.stringify(riwayatData));
 
     notifPopup("Halo " + username + " Menghubungkan...");
     fade();
@@ -65,10 +83,15 @@ function salam() {
   let elementSalam = document.getElementById("Salam");
   let idUser = localStorage.getItem("user_id");
   let elementId = document.getElementById("uID");
+  let avatar = document.querySelector(".av-circle");
 
   if (elementSalam) {
     if (namaUser) {
       elementSalam.innerText = namaUser;
+      if (avatar) {
+        avatar.style.backgroundColor = warnaAcak();
+        avatar.style.color = "black";
+      }
     } else {
       notifPopup("Akses ditolak!!! Silahkan login dulu Bosku!");
       Index();
@@ -86,36 +109,18 @@ function prosesLogout() {
 }
 
 salam();
-// function prosesLogin() {
-//   let nama = document.getElementById("username").value;
-//   if (nama === "") {
-//     notifPopup("Isi dulu usernamenya Bosku!");
-//     return false;
-//   } else {
-//     localStorage.setItem("user_aktif", nama);
-//     notifPopup("Halo " + nama + " Menghubungkan...");
-//     fade();
-//     setTimeout(() => {
-//       window.location.href = "home.html";
-//     }, 1000);
-//     return false;
-//   }
-// }
-// function salam() {
-//   let namaUser = localStorage.getItem("user_aktif");
-//   let elementSalam = document.getElementById("Salam");
-//   if (elementSalam) {
-//     if (namaUser) {
-//       elementSalam.innerText = "Halo, " + namaUser + "!";
-//     } else {
-//       notifPopup("Akses ditolak!!! Silahkan login dulu Bosku!");
-//       Index();
-//     }
-//   }
-// }
-// function prosesLogout() {
-//   localStorage.removeItem("user_aktif");
-//   notifPopup("Terima Kasih telah berkunjung Bosku!");
-//   Index();
-// }
-// salam();
+
+function tampilkanRiwayat() {
+  let list = document.getElementById("daftarRiwayat");
+  if (!list) return;
+  let riwayatData = JSON.parse(localStorage.getItem("history_login")) || [];
+  riwayatData.forEach((item) => {
+    let li = document.createElement("li");
+    li.innerText = item.nama + " (ID: " + item.id + ") pada " + item.waktu;
+    list.appendChild(li);
+  });
+}
+
+tampilkanRiwayat();
+
+let riwayatTampilan = riwayatData.reverse().slice(0, 5);
