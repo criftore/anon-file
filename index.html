@@ -12,12 +12,12 @@
     </header>
 
     <article>
-      <form action="home.html" method="get" onsubmit="return prosesLogin();">
+      <form id="prosesLoginForm" action="home.html" method="get">
         <fieldset>
           <legend>WELCOME</legend>
 
           <div class="form-group">
-            <label>Username</label>
+            <label for="username">Username</label>
             <span class="separator">:</span>
             <input
               type="text"
@@ -27,7 +27,7 @@
             />
           </div>
           <div class="form-group">
-            <label>Email</label>
+            <label for="email">Email</label>
             <span class="separator">:</span>
             <input
               type="email"
@@ -36,7 +36,7 @@
               placeholder="email..."
             />
           </div>
-          <div  id="btn-login"  class="submit">
+          <div id="btn-login" class="submit">
             <input type="submit" value="Login" />
           </div>
         </fieldset>

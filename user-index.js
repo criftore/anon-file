@@ -41,6 +41,14 @@ function warnaAcak() {
   return warna;
 }
 
+let prosesLoginForm = document.getElementById("prosesLoginForm");
+if (prosesLoginForm) {
+  prosesLoginForm.onsubmit = function (event) {
+    event.preventDefault();
+    prosesLogin();
+  };
+}
+
 function prosesLogin() {
   let username = document.getElementById("username").value;
   if (username === "") {
@@ -50,7 +58,7 @@ function prosesLogin() {
     const idBaru = unikId();
     localStorage.setItem("user_aktif", username);
     localStorage.setItem("user_id", idBaru);
-    let riwayatData = JSON.parse(localStorage.getItem("history-_login")) || [];
+    let riwayatData = JSON.parse(localStorage.getItem("history_login")) || [];
     const loginBaru = {
       nama: username,
       id: idBaru,
@@ -70,35 +78,38 @@ function prosesLogin() {
   }
 }
 
-const btnLogin = document.getElementById("btn-login");
-if (btnLogin) {
-  btnLogin.onclick = function (event) {
-    event.preventDefault();
-    prosesLogin();
-  };
-}
-
 function salam() {
   let namaUser = localStorage.getItem("user_aktif");
   let elementSalam = document.getElementById("Salam");
   let idUser = localStorage.getItem("user_id");
   let elementId = document.getElementById("uID");
-  let avatar = document.querySelector(".av-circle");
+  let Avatar = document.querySelector(".av-circle");
 
   if (elementSalam) {
     if (namaUser) {
       elementSalam.innerText = namaUser;
-      if (avatar) {
-        avatar.style.backgroundColor = warnaAcak();
-        avatar.style.color = "black";
+      if (elementId)
+        elementId.innerText = "#" + localStorage.getItem("user_id");
+      if (Avatar) {
+        Avatar.innerHTML = "";
+        let img = document.createElement("img");
+        img.src = "https://api.dicebear.com/7.x/pixel-art/svg?seed=" + namaUser;
+        img.style.width = "80%";
+        img.style.height = "80%";
+
+        img.onerror = function () {
+          img.innerHTML = "Avatar";
+        };
+        Avatar.appendChild(img);
+        Avatar.style.backgroundColor = warnaAcak();
+        Avatar.style.borderColor = warnaAcak();
       }
     } else {
-      notifPopup("Akses ditolak!!! Silahkan login dulu Bosku!");
-      Index();
+      if (!window.location.pathname.includes("index.html")) {
+        notifPopup("Akses ditolak!!! Silahkan login dulu Bosku!");
+        Index();
+      }
     }
-  }
-  if (elementId) {
-    elementId.innerText = "#" + idUser;
   }
 }
 function prosesLogout() {
@@ -108,19 +119,18 @@ function prosesLogout() {
   Index();
 }
 
-salam();
-
 function tampilkanRiwayat() {
   let list = document.getElementById("daftarRiwayat");
   if (!list) return;
   let riwayatData = JSON.parse(localStorage.getItem("history_login")) || [];
-  riwayatData.forEach((item) => {
+  let riwayatTampilan = [...riwayatData].reverse().slice(0, 5);
+  list.innerHTML = "";
+  riwayatTampilan.forEach((item) => {
     let li = document.createElement("li");
     li.innerText = item.nama + " (ID: " + item.id + ") pada " + item.waktu;
     list.appendChild(li);
   });
 }
 
+salam();
 tampilkanRiwayat();
-
-let riwayatTampilan = riwayatData.reverse().slice(0, 5);
